@@ -42,16 +42,12 @@ namespace
 
 Console::~Console()
 {
-    if (m_hOriginal)
+    if (m_hOutput)
     {
-        SetConsoleActiveScreenBuffer(m_hOriginal);
-    }
-    for (const HANDLE buffer: m_hBuffer)
-    {
-        if (buffer)
-        {
-            CloseHandle(buffer);
-        }
+        CONSOLE_CURSOR_INFO cursorInfo;
+        cursorInfo.bVisible = TRUE;
+        cursorInfo.dwSize   = 25;
+        SetConsoleCursorInfo(m_hOutput, &cursorInfo);
     }
 }
 
@@ -65,31 +61,24 @@ void Console::Init(
 
     SetConsoleTitleW(L"TextGradius");
 
-    m_hOriginal = GetStdHandle(STD_OUTPUT_HANDLE);
+    m_hOutput = GetStdHandle(STD_OUTPUT_HANDLE);
 
     const COORD      size   = { static_cast<SHORT>(_cols), static_cast<SHORT>(_rows) };
     const SMALL_RECT window = { 0, 0, static_cast<SHORT>(_cols - 1), static_cast<SHORT>(_rows - 1) };
 
-    for (HANDLE& buffer: m_hBuffer)
-    {
-        buffer = CreateConsoleScreenBuffer(GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, CONSOLE_TEXTMODE_BUFFER, nullptr);
+    // 창부터 줄여야 이후 버퍼 사이즈 지정이 창보다 작다고 거부되지 않음.
+    const SMALL_RECT shrink = { 0, 0, 0, 0 };
+    SetConsoleWindowInfo(m_hOutput, TRUE, &shrink);
+    SetConsoleScreenBufferSize(m_hOutput, size);
+    SetConsoleWindowInfo(m_hOutput, TRUE, &window);
 
-        const SMALL_RECT shrink = { 0, 0, 0, 0 };
-        SetConsoleWindowInfo(buffer, TRUE, &shrink);
-        SetConsoleScreenBufferSize(buffer, size);
-        SetConsoleWindowInfo(buffer, TRUE, &window);
-
-        CONSOLE_CURSOR_INFO cursorInfo;
-        cursorInfo.bVisible = FALSE;
-        cursorInfo.dwSize   = 1;
-        SetConsoleCursorInfo(buffer, &cursorInfo);
-    }
+    CONSOLE_CURSOR_INFO cursorInfo;
+    cursorInfo.bVisible = FALSE;
+    cursorInfo.dwSize   = 1;
+    SetConsoleCursorInfo(m_hOutput, &cursorInfo);
 
     Clear();
-    Blit(m_hBuffer[0]);
-    Blit(m_hBuffer[1]);
-    SetConsoleActiveScreenBuffer(m_hBuffer[0]);
-    m_activeIndex = 0;
+    Present();
 }
 
 void Console::Clear()
@@ -167,18 +156,10 @@ void Console::PrintAt(
     }
 }
 
-void Console::Blit(const HANDLE _target) const
+void Console::Present()
 {
     const COORD bufferSize  = { static_cast<SHORT>(m_cols), static_cast<SHORT>(m_rows) };
     const COORD bufferCoord = { 0, 0 };
     SMALL_RECT  writeRegion = { 0, 0, static_cast<SHORT>(m_cols - 1), static_cast<SHORT>(m_rows - 1) };
-    WriteConsoleOutputW(_target, m_cells.data(), bufferSize, bufferCoord, &writeRegion);
-}
-
-void Console::Present()
-{
-    const int target = 1 - m_activeIndex;
-    Blit(m_hBuffer[target]);
-    SetConsoleActiveScreenBuffer(m_hBuffer[target]);
-    m_activeIndex = target;
+    WriteConsoleOutputW(m_hOutput, m_cells.data(), bufferSize, bufferCoord, &writeRegion);
 }

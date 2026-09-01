@@ -1,4 +1,4 @@
-#include "StageIntroScene.h"
+﻿#include "StageIntroScene.h"
 
 #include <conio.h>
 
@@ -10,13 +10,13 @@ constexpr int kIntroSeconds = 5;
 
 void StageIntroScene::OnEnter()
 {
-    m_ticksLeft     = kIntroSeconds * 60;
+    m_ticksLeft     = kIntroSeconds * 30;
     m_lastCountdown = -1;
 }
 
 void StageIntroScene::Draw()
 {
-    const int countdown = (m_ticksLeft + 59) / 60;
+    const int countdown = (m_ticksLeft + 29) / 30;
     if (countdown == m_lastCountdown)
     {
         return;

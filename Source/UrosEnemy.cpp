@@ -71,5 +71,5 @@ void UrosEnemy::Fire(
     {
         return;
     }
-    SpawnPooledEnemyBullet(_bulletPool, _cursor, static_cast<float>(m_x - 2), static_cast<float>(m_y), -4.f, 0.f, "◈");
+    SpawnPooledEnemyBullet(_bulletPool, _cursor, static_cast<float>(m_x - 2), static_cast<float>(m_y), -2.f, 0.f, "◈");
 }

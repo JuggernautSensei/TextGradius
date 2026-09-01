@@ -1,4 +1,4 @@
-#include "RankingData.h"
+﻿#include "RankingData.h"
 
 #include <algorithm>
 #include <fstream>

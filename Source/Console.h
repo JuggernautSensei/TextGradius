@@ -49,11 +49,8 @@ public:
 
 private:
     void WriteCell(int _x, int _y, wchar_t _ch, WORD _attr);
-    void Blit(HANDLE _target) const;
 
-    HANDLE m_hOriginal   = nullptr;
-    HANDLE m_hBuffer[2]  = { nullptr, nullptr };
-    int    m_activeIndex = 0;
+    HANDLE m_hOutput     = nullptr;
     int    m_cols        = 0;
     int    m_rows        = 0;
     WORD   m_currentAttr = 0x0F;

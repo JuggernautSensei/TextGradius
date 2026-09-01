@@ -51,7 +51,7 @@ void CallEnemy::Fire(
 
     const auto fx = static_cast<float>(m_x - 2);
     const auto fy = static_cast<float>(m_y);
-    SpawnPooledEnemyBullet(_bulletPool, _cursor, fx, fy, -2.f, 0.f, "♬");
-    SpawnPooledEnemyBullet(_bulletPool, _cursor, fx, fy, -1.72f, -0.5f, "♬");
-    SpawnPooledEnemyBullet(_bulletPool, _cursor, fx, fy, -1.72f, 0.5f, "♬");
+    SpawnPooledEnemyBullet(_bulletPool, _cursor, fx, fy, -1.f, 0.f, "♬");
+    SpawnPooledEnemyBullet(_bulletPool, _cursor, fx, fy, -0.86f, -0.25f, "♬");
+    SpawnPooledEnemyBullet(_bulletPool, _cursor, fx, fy, -0.86f, 0.25f, "♬");
 }
