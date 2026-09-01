@@ -49,7 +49,7 @@ public:
 
 private:
     void WriteCell(int _x, int _y, wchar_t _ch, WORD _attr);
-    void Blit(HANDLE _target);
+    void Blit(HANDLE _target) const;
 
     HANDLE m_hOriginal   = nullptr;
     HANDLE m_hBuffer[2]  = { nullptr, nullptr };

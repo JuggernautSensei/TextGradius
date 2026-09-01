@@ -4,14 +4,14 @@
     <Filter Include="Core">
       <UniqueIdentifier>{4a10e299-8394-459f-9efa-95e694f550b4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Actor">
-      <UniqueIdentifier>{4aaaa560-473a-4c66-8469-e10cc84bb8f2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{e4807e2c-afef-4edb-9936-619dd076fb71}</UniqueIdentifier>
     </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{06a90148-1460-4d3d-902e-c757000a1d32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{4aaaa560-473a-4c66-8469-e10cc84bb8f2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,28 +31,28 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Source\Bullet.cpp">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\Player.cpp">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\Star.cpp">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\Enemy.cpp">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\EnemyBullet.cpp">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\UrosEnemy.cpp">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\CallEnemy.cpp">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\StarmanEnemy.cpp">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClCompile>
     <ClCompile Include="Source\Scene.cpp">
       <Filter>Scene</Filter>
@@ -105,28 +105,28 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Source\Bullet.h">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\Player.h">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\Star.h">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy.h">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\EnemyBullet.h">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\UrosEnemy.h">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\CallEnemy.h">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\StarmanEnemy.h">
-      <Filter>Actor</Filter>
+      <Filter>Object</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scene.h">
       <Filter>Scene</Filter>
