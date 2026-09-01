@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Gradius.vcxproj" Id="6768b03a-2dde-4a7a-a2fc-a9ba7b4193e7" />
+</Solution>
