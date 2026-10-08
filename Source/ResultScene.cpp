@@ -1,10 +1,9 @@
 ﻿#include "ResultScene.h"
 
-#include <conio.h>
-
 #include "Config.h"
 #include "Embed.h"
 #include "Game.h"
+#include "Input.h"
 #include "RankingData.h"
 
 void ResultScene::OnEnter()
@@ -17,11 +16,11 @@ void ResultScene::OnEnter()
 
 eSceneId ResultScene::Update()
 {
-    if (!_kbhit() || _getch() != kKeyEnter)
+    if (!_kbhit() || ReadKey() != kKeyEnter)
     {
         return eSceneId::None;
     }
 
     AppendRankingData(m_game.GetPlayerId(), m_game.PlayerName(), m_game.Score());
-    return eSceneId::Exit;
+    return eSceneId::Title;
 }

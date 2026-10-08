@@ -1,11 +1,11 @@
 #include "NameEntryScene.h"
 
 #include <cctype>
-#include <conio.h>
 
 #include "Config.h"
 #include "Embed.h"
 #include "Game.h"
+#include "Input.h"
 
 constexpr size_t kMaxNameLength = 10;
 
@@ -36,7 +36,7 @@ eSceneId NameEntryScene::Update()
         return eSceneId::None;
     }
 
-    const int key = _getch();
+    const int key = ReadKey();
 
     if (key == kKeyEnter)
     {
@@ -56,7 +56,7 @@ eSceneId NameEntryScene::Update()
         }
         return eSceneId::None;
     }
-    if (std::isprint(key) && m_input.size() < kMaxNameLength)
+    if (key < kKeyExtended && key != ' ' && std::isprint(key) && m_input.size() < kMaxNameLength)
     {
         m_input.push_back(static_cast<char>(key));
         m_bDirty = true;

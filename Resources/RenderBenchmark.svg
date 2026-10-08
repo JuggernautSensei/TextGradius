@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="332" viewBox="0 0 760 332" font-family="Malgun Gothic, Apple SD Gothic Neo, Noto Sans KR, sans-serif">
+<style>
+.surface{fill:#fcfcfb}.primary{fill:#0b0b0b}.secondary{fill:#52514e}.grid{stroke:#e4e3df}.budget{stroke:#52514e}.bar{fill:#2a78d6}
+@media (prefers-color-scheme: dark){.surface{fill:#1a1a19}.primary{fill:#ffffff}.secondary{fill:#c3c2b7}.grid{stroke:#353533}.budget{stroke:#c3c2b7}.bar{fill:#3987e5}}
+</style>
+<rect class="surface" width="760" height="332" rx="8"/>
+<text class="primary" x="24" y="34" font-size="16" font-weight="bold">프레임당 출력 시간</text>
+<text class="secondary" x="24" y="54" font-size="12">100×30 화면, 오브젝트 150개, 60프레임 × 3회 평균 · 로그 눈금 · 짧을수록 빠름</text>
+<line class="grid" x1="270.0" y1="86" x2="270.0" y2="276" stroke-width="1"/>
+<text class="secondary" x="270.0" y="294" font-size="11" text-anchor="middle">0.01</text>
+<line class="grid" x1="377.5" y1="86" x2="377.5" y2="276" stroke-width="1"/>
+<text class="secondary" x="377.5" y="294" font-size="11" text-anchor="middle">0.1</text>
+<line class="grid" x1="485.0" y1="86" x2="485.0" y2="276" stroke-width="1"/>
+<text class="secondary" x="485.0" y="294" font-size="11" text-anchor="middle">1</text>
+<line class="grid" x1="592.5" y1="86" x2="592.5" y2="276" stroke-width="1"/>
+<text class="secondary" x="592.5" y="294" font-size="11" text-anchor="middle">10</text>
+<line class="grid" x1="700.0" y1="86" x2="700.0" y2="276" stroke-width="1"/>
+<text class="secondary" x="700.0" y="294" font-size="11" text-anchor="middle">100</text>
+<text class="secondary" x="700" y="310" font-size="11" text-anchor="end">ms / 프레임</text>
+<line class="budget" x1="648.7" y1="80" x2="648.7" y2="276" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text class="secondary" x="642.7" y="76" font-size="11" text-anchor="end">30fps 한계 33.3 ms</text>
+<text class="primary" x="258" y="110.0" font-size="13" text-anchor="end">cls + 오브젝트마다 printf</text>
+<path class="bar" d="M270.0,94.0 H653.3 Q657.3,94.0 657.3,98.0 V114.0 Q657.3,118.0 653.3,118.0 H270.0 Z"/>
+<text class="primary" x="665.3" y="110.0" font-size="13" font-weight="bold">40.0 ms</text>
+<text class="primary" x="258" y="158.0" font-size="13" text-anchor="end">오브젝트마다 printf (cls 없음)</text>
+<path class="bar" d="M270.0,142.0 H555.7 Q559.7,142.0 559.7,146.0 V162.0 Q559.7,166.0 555.7,166.0 H270.0 Z"/>
+<text class="primary" x="567.7" y="158.0" font-size="13" font-weight="bold">4.96 ms</text>
+<text class="primary" x="258" y="206.0" font-size="13" text-anchor="end">문자 배열 + printf 1회</text>
+<path class="bar" d="M270.0,190.0 H473.9 Q477.9,190.0 477.9,194.0 V210.0 Q477.9,214.0 473.9,214.0 H270.0 Z"/>
+<text class="primary" x="485.9" y="206.0" font-size="13" font-weight="bold">0.86 ms</text>
+<text class="primary" x="258" y="254.0" font-size="13" text-anchor="end">백버퍼 + WriteConsoleOutputW 1회</text>
+<path class="bar" d="M270.0,238.0 H364.2 Q368.2,238.0 368.2,242.0 V258.0 Q368.2,262.0 364.2,262.0 H270.0 Z"/>
+<text class="primary" x="376.2" y="254.0" font-size="13" font-weight="bold">0.08 ms</text>
+</svg>

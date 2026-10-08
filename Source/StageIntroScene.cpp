@@ -1,22 +1,21 @@
 ﻿#include "StageIntroScene.h"
 
-#include <conio.h>
-
 #include "Config.h"
 #include "Embed.h"
 #include "Game.h"
+#include "Input.h"
 
 constexpr int kIntroSeconds = 5;
 
 void StageIntroScene::OnEnter()
 {
-    m_ticksLeft     = kIntroSeconds * 30;
+    m_ticksLeft     = kIntroSeconds * kFps;
     m_lastCountdown = -1;
 }
 
 void StageIntroScene::Draw()
 {
-    const int countdown = (m_ticksLeft + 29) / 30;
+    const int countdown = (m_ticksLeft + kFps - 1) / kFps;
     if (countdown == m_lastCountdown)
     {
         return;
@@ -35,7 +34,7 @@ eSceneId StageIntroScene::Update()
 {
     Draw();
 
-    if (_kbhit() && _getch() == kKeyEnter)
+    if (_kbhit() && ReadKey() == kKeyEnter)
     {
         return eSceneId::Gameplay;
     }

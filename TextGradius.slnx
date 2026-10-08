@@ -4,4 +4,5 @@
     <Platform Name="x86" />
   </Configurations>
   <Project Path="TextGradius.vcxproj" Id="6768b03a-2dde-4a7a-a2fc-a9ba7b4193e7" />
+  <Project Path="Benchmark/RenderBenchmark.vcxproj" Id="478c2c51-2cf4-4694-8c1d-31c09de0acf5" />
 </Solution>

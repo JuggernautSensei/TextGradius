@@ -13,6 +13,8 @@
 #include "GameplayScene.h"
 #include "TitleScene.h"
 
+#pragma comment(lib, "winmm.lib")
+
 Game::Game() = default;
 
 Game::~Game() = default;
@@ -90,6 +92,8 @@ UniquePtr<Scene> Game::CreateScene(const eSceneId _id)
 
 void Game::Run()
 {
+    timeBeginPeriod(1);
+
     RandomSeed();
     m_console.Init(kFieldWidth, kFieldHeight);
 
@@ -113,4 +117,6 @@ void Game::Run()
             m_scene->OnEnter();
         }
     }
+
+    timeEndPeriod(1);
 }

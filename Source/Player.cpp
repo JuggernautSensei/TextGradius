@@ -4,9 +4,9 @@
 
 const ShipStats& GetShipStats(const eShipType _type)
 {
-    static const ShipStats kTriangle { 5, 1, 5, 4, "▶", "─", eColor::LightCyan };
-    static const ShipStats kClover { 3, 1, 3, 2, "♣", "ㆍ", eColor::Yellow };
-    static const ShipStats kDiamond { 4, 1, 7, 6, "◆", "⊙", eColor::White };
+    static const ShipStats kTriangle { 7, 1, 5, 4, "▶", "─", eColor::LightCyan };
+    static const ShipStats kClover { 5, 1, 3, 2, "♣", "ㆍ", eColor::Yellow };
+    static const ShipStats kDiamond { 6, 1, 7, 6, "◆", "⊙", eColor::White };
 
     switch (_type)
     {
@@ -110,7 +110,7 @@ void Player::Update(const int _ct)
 void Player::TakeDamage()
 {
     --m_life;
-    m_undieTime = 10;
+    m_undieTime = kInvincibleTicks;
 }
 
 void Player::Update()

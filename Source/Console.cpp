@@ -1,6 +1,9 @@
 ﻿#include "Console.h"
 
 #include <algorithm>
+#include <cstdlib>
+
+#include "Config.h"
 
 namespace
 {
@@ -158,8 +161,29 @@ void Console::PrintAt(
 
 void Console::Present()
 {
+#if GRAD_FLICKER_RENDER
+    system("cls");
+    for (int y = 0; y < m_rows; ++y)
+    {
+        for (int x = 0; x < m_cols; ++x)
+        {
+            const CHAR_INFO& cell = m_cells[static_cast<size_t>(y) * m_cols + x];
+            if (cell.Char.UnicodeChar == L' ' || (cell.Attributes & COMMON_LVB_TRAILING_BYTE))
+            {
+                continue;
+            }
+
+            SetConsoleCursorPosition(m_hOutput, { static_cast<SHORT>(x), static_cast<SHORT>(y) });
+            SetConsoleTextAttribute(m_hOutput, cell.Attributes & 0xFF);
+
+            DWORD written = 0;
+            WriteConsoleW(m_hOutput, &cell.Char.UnicodeChar, 1, &written, nullptr);
+        }
+    }
+#else
     const COORD bufferSize  = { static_cast<SHORT>(m_cols), static_cast<SHORT>(m_rows) };
     const COORD bufferCoord = { 0, 0 };
     SMALL_RECT  writeRegion = { 0, 0, static_cast<SHORT>(m_cols - 1), static_cast<SHORT>(m_rows - 1) };
     WriteConsoleOutputW(m_hOutput, m_cells.data(), bufferSize, bufferCoord, &writeRegion);
+#endif
 }

@@ -26,12 +26,8 @@ private:
     Vector<UrosEnemy>    m_uros;
     Vector<CallEnemy>    m_call;
     Vector<StarmanEnemy> m_starman;
-    Vector<EnemyBullet>  m_urosBullets;
-    Vector<EnemyBullet>  m_callBullets;
+    Vector<Enemy*>       m_enemies;
+    Vector<EnemyBullet>  m_enemyBullets;
 
-    size_t m_urosSpawn        = 0;
-    size_t m_callSpawn        = 0;
-    size_t m_starmanSpawn     = 0;
-    size_t m_urosBulletCursor = 0;
-    size_t m_callBulletCursor = 0;
+    size_t m_enemyBulletCursor = 0;
 };

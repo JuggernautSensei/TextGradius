@@ -1,20 +1,31 @@
 ﻿#include "GameplayScene.h"
 
-#include <conio.h>
-
 #include "Config.h"
 #include "Embed.h"
 #include "Game.h"
+#include "Input.h"
+
+namespace
+{
+
+template<typename T>
+void SpawnInFreeSlot(Vector<T>& _pool)
+{
+    for (T& enemy: _pool)
+    {
+        if (!enemy.IsAlive())
+        {
+            enemy.Spawn();
+            return;
+        }
+    }
+}
+
+}   // namespace
 
 void GameplayScene::OnEnter()
 {
     m_ct = 0;
-
-    m_urosSpawn        = 0;
-    m_callSpawn        = 0;
-    m_starmanSpawn     = 0;
-    m_urosBulletCursor = 0;
-    m_callBulletCursor = 0;
 
     m_stars.assign(kMaxStar, Star {});
     for (Star& star: m_stars)
@@ -25,8 +36,23 @@ void GameplayScene::OnEnter()
     m_uros.assign(kMaxUros, UrosEnemy {});
     m_call.assign(kMaxCall, CallEnemy {});
     m_starman.assign(kMaxStarman, StarmanEnemy {});
-    m_urosBullets.assign(kMaxUrosBullet, EnemyBullet {});
-    m_callBullets.assign(kMaxCallBullet, EnemyBullet {});
+
+    m_enemies.clear();
+    for (UrosEnemy& enemy: m_uros)
+    {
+        m_enemies.push_back(&enemy);
+    }
+    for (CallEnemy& enemy: m_call)
+    {
+        m_enemies.push_back(&enemy);
+    }
+    for (StarmanEnemy& enemy: m_starman)
+    {
+        m_enemies.push_back(&enemy);
+    }
+
+    m_enemyBullets.assign(kMaxEnemyBullet, EnemyBullet {});
+    m_enemyBulletCursor = 0;
 
     m_game.GetPlayer().ResetForStage();
 }
@@ -37,31 +63,26 @@ void GameplayScene::SpawnWave()
     {
         if (m_ct > 10 && m_ct % 40 == 0)
         {
-            m_uros[m_urosSpawn].Spawn();
-            m_urosSpawn = (m_urosSpawn + 1) % m_uros.size();
+            SpawnInFreeSlot(m_uros);
         }
         if (m_ct > 400 && m_ct % 50 == 0)
         {
-            m_call[m_callSpawn].Spawn();
-            m_callSpawn = (m_callSpawn + 1) % m_call.size();
+            SpawnInFreeSlot(m_call);
         }
         return;
     }
 
     if (m_ct > 10 && m_ct % 50 == 25)
     {
-        m_uros[m_urosSpawn].Spawn();
-        m_urosSpawn = (m_urosSpawn + 1) % m_uros.size();
+        SpawnInFreeSlot(m_uros);
     }
     if (m_ct > 10 && m_ct % 50 == 0)
     {
-        m_call[m_callSpawn].Spawn();
-        m_callSpawn = (m_callSpawn + 1) % m_call.size();
+        SpawnInFreeSlot(m_call);
     }
     if (m_ct > 300 && m_ct % 70 == 0)
     {
-        m_starman[m_starmanSpawn].Spawn();
-        m_starmanSpawn = (m_starmanSpawn + 1) % m_starman.size();
+        SpawnInFreeSlot(m_starman);
     }
 }
 
@@ -75,51 +96,22 @@ void GameplayScene::UpdateActors()
         star.Update(player.GetX(), player.GetY());
     }
 
-    for (UrosEnemy& enemy: m_uros)
+    for (Enemy* enemy: m_enemies)
     {
-        if (enemy.IsAlive())
+        if (enemy->IsAlive())
         {
-            enemy.Update(player, player.GetBullets());
+            enemy->Update(player, player.GetBullets());
         }
     }
-    for (CallEnemy& enemy: m_call)
+    for (Enemy* enemy: m_enemies)
     {
-        if (enemy.IsAlive())
+        if (enemy->IsAlive())
         {
-            enemy.Update(player, player.GetBullets());
-        }
-    }
-    for (StarmanEnemy& enemy: m_starman)
-    {
-        if (enemy.IsAlive())
-        {
-            enemy.Update(player, player.GetBullets());
+            enemy->Fire(m_enemyBullets, m_enemyBulletCursor);
         }
     }
 
-    for (UrosEnemy& enemy: m_uros)
-    {
-        if (enemy.IsAlive())
-        {
-            enemy.Fire(m_urosBullets, m_urosBulletCursor);
-        }
-    }
-    for (CallEnemy& enemy: m_call)
-    {
-        if (enemy.IsAlive())
-        {
-            enemy.Fire(m_callBullets, m_callBulletCursor);
-        }
-    }
-
-    for (EnemyBullet& bullet: m_urosBullets)
-    {
-        if (bullet.IsAlive())
-        {
-            bullet.Update();
-        }
-    }
-    for (EnemyBullet& bullet: m_callBullets)
+    for (EnemyBullet& bullet: m_enemyBullets)
     {
         if (bullet.IsAlive())
         {
@@ -136,77 +128,31 @@ void GameplayScene::ResolveContactDamage()
         return;
     }
 
-    bool bHit = false;
-    for (const UrosEnemy& enemy: m_uros)
+    for (const Enemy* enemy: m_enemies)
     {
-        if (enemy.IsAlive() && enemy.CollidesWithPlayer(player))
+        if (enemy->IsAlive() && enemy->CollidesWithPlayer(player))
         {
-            bHit = true;
-            break;
+            player.TakeDamage();
+            return;
         }
     }
-    if (!bHit)
+    for (EnemyBullet& bullet: m_enemyBullets)
     {
-        for (const CallEnemy& enemy: m_call)
+        if (bullet.CollidesWithPlayer(player))
         {
-            if (enemy.IsAlive() && enemy.CollidesWithPlayer(player))
-            {
-                bHit = true;
-                break;
-            }
+            bullet.Kill();
+            player.TakeDamage();
+            return;
         }
-    }
-    if (!bHit)
-    {
-        for (EnemyBullet& bullet: m_urosBullets)
-        {
-            if (bullet.CollidesWithPlayer(player))
-            {
-                bullet.Kill();
-                bHit = true;
-                break;
-            }
-        }
-    }
-    if (!bHit)
-    {
-        for (EnemyBullet& bullet: m_callBullets)
-        {
-            if (bullet.CollidesWithPlayer(player))
-            {
-                bullet.Kill();
-                bHit = true;
-                break;
-            }
-        }
-    }
-
-    if (bHit)
-    {
-        player.TakeDamage();
     }
 }
 
 void GameplayScene::CollectScores()
 {
     int score = 0;
-    for (UrosEnemy& enemy: m_uros)
+    for (Enemy* enemy: m_enemies)
     {
-        if (enemy.ConsumePendingScore(score))
-        {
-            m_game.Score() += score;
-        }
-    }
-    for (CallEnemy& enemy: m_call)
-    {
-        if (enemy.ConsumePendingScore(score))
-        {
-            m_game.Score() += score;
-        }
-    }
-    for (StarmanEnemy& enemy: m_starman)
-    {
-        if (enemy.ConsumePendingScore(score))
+        if (enemy->ConsumePendingScore(score))
         {
             m_game.Score() += score;
         }
@@ -226,23 +172,11 @@ void GameplayScene::Render()
     Player& player = m_game.GetPlayer();
     player.Render(console);
 
-    for (const UrosEnemy& enemy: m_uros)
+    for (const Enemy* enemy: m_enemies)
     {
-        enemy.Render(console);
+        enemy->Render(console);
     }
-    for (const CallEnemy& enemy: m_call)
-    {
-        enemy.Render(console);
-    }
-    for (const StarmanEnemy& enemy: m_starman)
-    {
-        enemy.Render(console);
-    }
-    for (const EnemyBullet& bullet: m_urosBullets)
-    {
-        bullet.Render(console);
-    }
-    for (const EnemyBullet& bullet: m_callBullets)
+    for (const EnemyBullet& bullet: m_enemyBullets)
     {
         bullet.Render(console);
     }
@@ -269,9 +203,13 @@ eSceneId GameplayScene::Update()
     }
 
     bool bStageFinished = (m_ct >= kStageClearTick);
-    if (_kbhit() && _getch() == kKeyEnter)
+
+    while (_kbhit())
     {
-        bStageFinished = true;
+        if (ReadKey() == kKeyEnter && kEnableStageSkip)
+        {
+            bStageFinished = true;
+        }
     }
 
     if (bStageFinished)

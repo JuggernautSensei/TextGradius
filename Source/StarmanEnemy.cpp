@@ -5,7 +5,7 @@
 
 void StarmanEnemy::Spawn()
 {
-    ResetCommon(20, 200);
+    ResetCommon(kEnemyLife, 200);
     m_x        = kFieldWidth - 4;
     m_y        = RandomRange(3, kFieldHeight - 3);
     m_fx       = static_cast<float>(m_x);
@@ -59,6 +59,7 @@ void StarmanEnemy::Update(
     m_x = static_cast<int>(m_fx);
     m_y = static_cast<int>(m_fy);
 
+    bool bRammed = false;
     if (m_lifeTime > 0)
     {
         if (m_x <= 2 || m_x > kFieldWidth - 2)
@@ -70,8 +71,8 @@ void StarmanEnemy::Update(
         if (!_player.IsInvincible() && bTouchingPlayer)
         {
             _player.TakeDamage();
-            m_score    = 10;
             m_lifeTime = 0;
+            bRammed    = true;
         }
     }
 
@@ -79,7 +80,8 @@ void StarmanEnemy::Update(
 
     if (m_lifeTime <= 0 && m_life > 0)
     {
-        m_life = 0;
+        m_score = bRammed ? 10 : 0;
+        m_life  = 0;
     }
 }
 

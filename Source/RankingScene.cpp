@@ -1,10 +1,9 @@
 #include "RankingScene.h"
 
-#include <conio.h>
-
 #include "Config.h"
 #include "Embed.h"
 #include "Game.h"
+#include "Input.h"
 #include "RankingData.h"
 
 void RankingScene::OnEnter()
@@ -26,7 +25,7 @@ void RankingScene::OnEnter()
 
 eSceneId RankingScene::Update()
 {
-    if (_kbhit() && _getch() == kKeyEnter)
+    if (_kbhit() && ReadKey() == kKeyEnter)
     {
         return eSceneId::Title;
     }

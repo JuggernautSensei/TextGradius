@@ -5,7 +5,7 @@
 
 void UrosEnemy::Spawn()
 {
-    ResetCommon(20, 100);
+    ResetCommon(kEnemyLife, 100);
     m_x           = kFieldWidth - 4;
     m_y           = RandomRange(3, kFieldHeight - 3);
     m_patternTime = RandomRange(0, 10);
@@ -67,7 +67,7 @@ void UrosEnemy::Fire(
     Vector<EnemyBullet>& _bulletPool,
     size_t&              _cursor)
 {
-    if (m_life <= 0 || m_enemyTime % 20 != 0)
+    if (m_life <= 0 || m_enemyTime % 30 != 0)
     {
         return;
     }

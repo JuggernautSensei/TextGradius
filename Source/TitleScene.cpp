@@ -1,9 +1,8 @@
 #include "TitleScene.h"
 
-#include <conio.h>
-
 #include "Config.h"
 #include "Game.h"
+#include "Input.h"
 
 void TitleScene::OnEnter()
 {
@@ -32,7 +31,7 @@ eSceneId TitleScene::Update()
         return eSceneId::None;
     }
 
-    const int key = _getch();
+    const int key = ReadKey();
     switch (key)
     {
         case kKeyUp:

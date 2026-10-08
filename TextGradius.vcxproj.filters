@@ -92,6 +92,9 @@
     <ClInclude Include="Source\Config.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Input.h">
+      <Filter>Core</Filter>
+    </ClInclude>
     <ClInclude Include="Source\Console.h">
       <Filter>Core</Filter>
     </ClInclude>

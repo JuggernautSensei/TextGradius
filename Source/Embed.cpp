@@ -4,32 +4,6 @@
 #include <format>
 #include <sstream>
 
-struct DisplayBars
-{
-    int durability = 0;
-    int speed      = 0;
-    int power      = 0;
-    int rateOfFire = 0;
-};
-
-[[nodiscard]] static const DisplayBars& GetDisplayBars(const eShipType _type)
-{
-    static const DisplayBars kTriangle { 5, 3, 4, 3 };
-    static const DisplayBars kClover { 3, 4, 3, 5 };
-    static const DisplayBars kDiamond { 4, 3, 5, 3 };
-
-    switch (_type)
-    {
-        case eShipType::Triangle:
-            return kTriangle;
-        case eShipType::Clover:
-            return kClover;
-        case eShipType::Diamond:
-        default:
-            return kDiamond;
-    }
-}
-
 [[nodiscard]] static String Bar(const int _count)
 {
     String result;
@@ -87,12 +61,13 @@ String BuildShipSelect(
 
     out << "   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒\n\n";
 
-    const DisplayBars& bars = GetDisplayBars(_selected);
+    constexpr int kRateBarScale = 12;
+
+    const ShipStats& stats = GetShipStats(_selected);
     out << "    기체 이름: " << kNames[static_cast<int>(_selected)] << "\n\n";
-    out << "    내구도: " << Bar(bars.durability) << "\n";
-    out << "    스피드: " << Bar(bars.speed) << "\n";
-    out << "    파괴력: " << Bar(bars.power) << "\n";
-    out << "    연사력: " << Bar(bars.rateOfFire) << "\n";
+    out << "    내구도: " << Bar(stats.maxLife) << "\n";
+    out << "    파괴력: " << Bar(stats.damage) << "\n";
+    out << "    연사력: " << Bar(kRateBarScale / stats.shotSpeed) << "\n";
     return out.str();
 }
 
@@ -128,7 +103,7 @@ String BuildResultScreen(
     out << "                          -----------------------------------------------\n\n";
     out << std::format("                                        Player Name: {}\n\n", _playerName);
     out << std::format("                                        Your Score: {}\n\n", _score);
-    out << "                                   Enter를 누르면 종료됩니다..";
+    out << "                              Enter를 누르면 타이틀로 돌아갑니다..";
     return out.str();
 }
 

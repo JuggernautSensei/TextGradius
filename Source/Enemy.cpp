@@ -75,7 +75,10 @@ void Enemy::Render(Console& _console) const
 
     if (m_life <= 0 && m_dieEvent > 0)
     {
-        _console.PrintAt(m_x - 1, m_y - 1, std::to_string(m_score), eColor::LightRed);
+        if (m_score > 0)
+        {
+            _console.PrintAt(m_x - 1, m_y - 1, std::to_string(m_score), eColor::LightRed);
+        }
         _console.PrintAt(m_x, m_y, "○", eColor::LightRed);
         return;
     }
