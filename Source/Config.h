@@ -6,7 +6,7 @@
 #endif
 
 #ifndef GRAD_FLICKER_RENDER
-#    define GRAD_FLICKER_RENDER 1
+#    define GRAD_FLICKER_RENDER 0
 #endif
 
 constexpr int kFieldWidth  = 100;
