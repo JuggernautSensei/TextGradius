@@ -56,8 +56,6 @@
 
 <p align="center"><img src="Resources/Ranking.gif" alt="타이틀에서 RANKING을 골라 점수순 기록을 확인하는 화면" width="840"></p>
 
-관련 구현: [`Player.cpp`](Source/Player.cpp), [`Enemy.cpp`](Source/Enemy.cpp), [`UrosEnemy.cpp`](Source/UrosEnemy.cpp), [`CallEnemy.cpp`](Source/CallEnemy.cpp), [`StarmanEnemy.cpp`](Source/StarmanEnemy.cpp), [`RankingData.cpp`](Source/RankingData.cpp).
-
 <br>
 
 ## 콘솔 렌더링
@@ -95,7 +93,7 @@ cell.Attributes       = _attr;
 WriteConsoleOutputW(m_hOutput, m_cells.data(), bufferSize, bufferCoord, &writeRegion);
 ```
 
-오브젝트의 `Render()`는 [`Console::WriteCell()`](https://github.com/JuggernautSensei/TextGradius/blob/095853a28425d20ce8894c9936d68677a0c75cea/Source/Console.cpp#L102)을 통해 백버퍼의 셀만 바꿉니다. 모든 그리기가 끝나면 [`Console::Present()`](https://github.com/JuggernautSensei/TextGradius/blob/095853a28425d20ce8894c9936d68677a0c75cea/Source/Console.cpp#L162)가 배열 전체를 콘솔로 복사합니다. 색상은 셀마다 속성으로 함께 담기므로, 글자마다 색을 바꾸는 호출도 필요 없습니다.
+오브젝트의 `Render()`는 `Console::WriteCell()`을 통해 백버퍼의 셀만 바꿉니다. 모든 그리기가 끝나면 `Console::Present()`가 배열 전체를 콘솔로 복사합니다. 색상은 셀마다 속성으로 함께 담기므로, 글자마다 색을 바꾸는 호출도 필요 없습니다.
 
 화면을 지우는 단계가 콘솔에서 사라졌기 때문에 지워진 화면이 노출될 틈이 없습니다. 이전 프레임 위에 완성된 다음 프레임을 덮어쓰는 방식이라 깜빡임이 없어졌습니다. 다만 그래픽스의 더블 버퍼링처럼 두 화면 버퍼를 교체하는 구조는 아닙니다. 콘솔 화면 버퍼는 하나만 사용하고, 메모리의 백버퍼를 그 위에 복사합니다.
 
@@ -103,7 +101,7 @@ WriteConsoleOutputW(m_hOutput, m_cells.data(), bufferSize, bufferCoord, &writeRe
 
 ### 출력 방식 비교
 
-처음 방식의 프레임 기록은 남아 있지 않습니다. 아래 수치는 **원인을 확인하기 위해 조건을 하나씩 바꿔 재현한 비교 실험**입니다. [`RenderBenchmark.cpp`](Benchmark/RenderBenchmark.cpp)에서 게임 화면과 같은 100×30 크기에 오브젝트 150개와 HUD 한 줄을 그리는 프레임을 60번 출력하고, 이를 3회 반복해 평균을 냈습니다. 오브젝트는 프레임마다 한 칸씩 옆으로 이동합니다.
+처음 방식의 프레임 기록은 남아 있지 않습니다. 아래 수치는 **원인을 확인하기 위해 조건을 하나씩 바꿔 재현한 비교 실험**입니다. `RenderBenchmark.cpp`에서 게임 화면과 같은 100×30 크기에 오브젝트 150개와 HUD 한 줄을 그리는 프레임을 60번 출력하고, 이를 3회 반복해 평균을 냈습니다. 오브젝트는 프레임마다 한 칸씩 옆으로 이동합니다.
 
 <p align="center"><img src="Resources/RenderBenchmark.svg" alt="네 가지 출력 방식의 프레임당 출력 시간을 로그 눈금으로 비교한 막대 그래프" width="760"></p>
 
@@ -115,7 +113,7 @@ WriteConsoleOutputW(m_hOutput, m_cells.data(), bufferSize, bufferCoord, &writeRe
 | 백버퍼 + WriteConsoleOutputW 1회 | CRT 대신 콘솔 API | 0.08ms |
 
 > [!NOTE]
-> 측정 결과는 [`benchmark_result.csv`](Benchmark/benchmark_result.csv)에 있고, 차트는 [`plot_benchmark.py`](Benchmark/plot_benchmark.py)로 생성했습니다. 측정한 컴퓨터의 하드웨어와 콘솔 호스트 종류는 기록되어 있지 않습니다. 콘솔 호스트와 컴퓨터에 따라 시간은 달라질 수 있습니다.
+> 측정 결과는 `benchmark_result.csv`에 있고, 차트는 `plot_benchmark.py`로 생성했습니다. 측정한 컴퓨터의 하드웨어와 콘솔 호스트 종류는 기록되어 있지 않습니다. 콘솔 호스트와 컴퓨터에 따라 시간은 달라질 수 있습니다.
 
 `cls`를 없애는 것만으로 약 8배 짧아졌습니다. 다만 두 번째 방식은 화면을 지우지 않아 이전 프레임의 문자가 그대로 남으므로, 실제 렌더링에 쓸 수 있는 방식은 아닙니다. `cls`의 비용을 따로 확인하기 위한 조건입니다.
 
@@ -123,15 +121,13 @@ WriteConsoleOutputW(m_hOutput, m_cells.data(), bufferSize, bufferCoord, &writeRe
 
 이 실험의 모든 방식은 한 가지 색만 사용하고 한글 같은 두 칸 문자는 그리지 않습니다. 실제 게임은 글자마다 색이 다르고 오브젝트 수도 프레임마다 달라지므로, 위 수치가 게임에서의 프레임 시간과 같지는 않습니다. 이 비교로 확인한 것은 `cls`, 출력 호출 횟수, CRT 경로가 각각 출력 시간에 얼마나 영향을 주는지입니다.
 
-관련 구현: [`Console.cpp`](Source/Console.cpp), [`RenderBenchmark.cpp`](Benchmark/RenderBenchmark.cpp).
-
 <br>
 
 ## 씬 전환과 게임 루프
 
 타이틀, 이름 입력, 기체 선택, 스테이지 소개, 게임플레이, 결과, 랭킹의 7개 화면은 각각 `Scene`을 상속한 씬입니다. 화면마다 입력을 받는 방식과 그리는 내용이 다르지만, 화면을 바꾸는 규칙은 같습니다. 그래서 씬은 다음에 이동할 화면만 알려 주고, 실제 교체는 `Game`이 맡도록 나눴습니다.
 
-각 씬의 `Update()`는 다음 씬의 `eSceneId`를 반환합니다. 현재 화면에 머무를 때는 `None`을, 게임을 끝낼 때는 `Exit`를 반환합니다. [`Game::Run()`](https://github.com/JuggernautSensei/TextGradius/blob/095853a28425d20ce8894c9936d68677a0c75cea/Source/Game.cpp#L93)은 이 값을 받아 `CreateScene()`으로 새 씬을 만들고 `OnEnter()`를 호출합니다.
+각 씬의 `Update()`는 다음 씬의 `eSceneId`를 반환합니다. 현재 화면에 머무를 때는 `None`을, 게임을 끝낼 때는 `Exit`를 반환합니다. `Game::Run()`은 이 값을 받아 `CreateScene()`으로 새 씬을 만들고 `OnEnter()`를 호출합니다.
 
 ```cpp
 while (true)
@@ -157,8 +153,6 @@ while (true)
 
 루프는 `timeBeginPeriod(1)`로 타이머 해상도를 1ms로 높인 뒤, 매 프레임 33ms를 쉬고 갱신과 출력을 실행합니다. 갱신과 출력에 걸린 시간을 빼지 않고 고정된 시간만 쉬므로, 실제 프레임 간격은 33ms에 처리 시간이 더해진 값입니다. 앞에서 줄인 출력 시간이 프레임 간격을 일정하게 유지하는 데에도 영향을 줍니다.
 
-관련 구현: [`Game.cpp`](Source/Game.cpp), [`Scene.h`](Source/Scene.h), [`GameplayScene.cpp`](Source/GameplayScene.cpp).
-
 <br>
 
 ## 오브젝트 풀
@@ -172,7 +166,7 @@ while (true)
 | 적 탄환 | 60 | 가장 오래된 탄환을 덮어씀 |
 | 플레이어 탄환 | 20 | 가장 오래된 탄환을 덮어씀 |
 
-적은 [`SpawnInFreeSlot()`](https://github.com/JuggernautSensei/TextGradius/blob/095853a28425d20ce8894c9936d68677a0c75cea/Source/GameplayScene.cpp#L12)이 풀에서 비활성 슬롯을 찾아 다시 등장시킵니다. 빈 슬롯이 없으면 그 시점에는 적이 나오지 않으므로, 풀 크기가 화면에 동시에 존재할 수 있는 적의 상한이 됩니다.
+적은 `SpawnInFreeSlot()`이 풀에서 비활성 슬롯을 찾아 다시 등장시킵니다. 빈 슬롯이 없으면 그 시점에는 적이 나오지 않으므로, 풀 크기가 화면에 동시에 존재할 수 있는 적의 상한이 됩니다.
 
 ```cpp
 template<typename T>
@@ -192,8 +186,6 @@ void SpawnInFreeSlot(Vector<T>& _pool)
 탄환은 빈 슬롯을 찾지 않습니다. 커서가 풀을 순환하며 다음 슬롯에 새 탄환을 쓰므로, 발사할 때 검색 비용이 없습니다. 풀이 가득 찬 상태에서는 가장 먼저 발사된 탄환이 새 탄환으로 바뀝니다. 탄환은 화면 끝에 닿거나 명중하면 짧은 소멸 효과를 보여 준 뒤 비활성화됩니다.
 
 세 종류의 적은 서로 다른 타입의 풀에 들어 있지만, 씬에 들어갈 때 공통 부모인 `Enemy`의 포인터 목록으로도 묶어 둡니다. 매 프레임의 갱신, 탄환 발사, 충돌 검사, 점수 수집, 그리기는 이 목록을 한 번씩 순회해 처리합니다. 적 종류마다 다른 이동과 공격 패턴은 각 클래스의 `Update()`와 `Fire()`에 있습니다.
-
-관련 구현: [`GameplayScene.cpp`](Source/GameplayScene.cpp), [`EnemyBullet.cpp`](Source/EnemyBullet.cpp), [`Player.cpp`](Source/Player.cpp), [`Enemy.cpp`](Source/Enemy.cpp).
 
 <br>
 
