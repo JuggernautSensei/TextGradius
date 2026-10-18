@@ -2,7 +2,7 @@
 
 # TextGradius
 
-**Windows 콘솔에서 문자로 그린 횡스크롤 슈팅 게임**
+**콘솔 텍스트 출력으로 동작하는 횡스크롤 슈팅 게임**
 
 ![C++20](https://img.shields.io/badge/C%2B%2B-20-00599C?logo=cplusplus&logoColor=white)
 ![Windows](https://img.shields.io/badge/Platform-Windows-0078D4)
