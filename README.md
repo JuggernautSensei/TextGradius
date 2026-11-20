@@ -1,10 +1,14 @@
-# TextGradius
+<h1 align="center">TextGradius</h1>
 
-콘솔 텍스트 출력으로 동작하는 횡스크롤 슈팅 게임
+<p align="center">C++20과 Win32 콘솔 API로 만든 텍스트 횡스크롤 슈팅 게임</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/C++-20-00599C?logo=cplusplus&logoColor=white" alt="C++ 20">
+  <img src="https://img.shields.io/badge/Windows-x64-0078D4" alt="Windows x64">
+  <img src="https://img.shields.io/badge/Win32-Console_API-2F7D6D" alt="Win32 Console API">
+</p>
 
 ![스테이지 2의 전투 화면. 적과 탄환, 체력과 점수, 진행 바가 함께 움직입니다.](Resources/Gameplay.gif)
-
-C++20과 Win32 콘솔 API로 만들었고 외부 라이브러리는 쓰지 않았습니다. Windows에서만 실행됩니다.
 
 ## Contents
 
