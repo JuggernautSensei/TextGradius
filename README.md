@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Win32-Console_API-2F7D6D" alt="Win32 Console API">
 </p>
 
-![스테이지 2에서 기체가 적과 탄환을 피하는 전투 화면](Resources/Gameplay.gif)
+<p align="center"><img src="Resources/Gameplay.gif" alt="스테이지 2에서 기체가 적과 탄환을 피하는 전투 화면"></p>
 
 ## Contents
 
