@@ -1,0 +1,5 @@
+method,ms_per_frame
+cls_printf_per_object,40.0405
+printf_per_object,4.95627
+array_printf_once,0.859582
+back_buffer_write_console_output,0.0818989
